@@ -2,6 +2,8 @@ package com.adeesha.OnlineLibrarySystem.controller;
 
 import com.adeesha.OnlineLibrarySystem.dto.BorrowRecordDto;
 import com.adeesha.OnlineLibrarySystem.dto.BorrowRequestDto;
+import com.adeesha.OnlineLibrarySystem.entity.User;
+import com.adeesha.OnlineLibrarySystem.repository.UserRepository;
 import com.adeesha.OnlineLibrarySystem.service.BorrowService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.*;
 public class BorrowController {
 
     private final BorrowService borrowService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public BorrowController(BorrowService borrowService) {
+    public BorrowController(BorrowService borrowService, UserRepository userRepository) {
         this.borrowService = borrowService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping
@@ -32,8 +36,8 @@ public class BorrowController {
     public ResponseEntity<BorrowRecordDto> borrowBook(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody BorrowRequestDto borrowRequest) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        BorrowRecordDto borrowRecordDto = borrowService.borrowBook(userId, borrowRequest);
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        BorrowRecordDto borrowRecordDto = borrowService.borrowBook(user.getId(), borrowRequest);
         return new ResponseEntity<>(borrowRecordDto, HttpStatus.CREATED);
     }
 
@@ -42,8 +46,8 @@ public class BorrowController {
     public ResponseEntity<BorrowRecordDto> returnBook(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long borrowId) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        BorrowRecordDto borrowRecordDto = borrowService.returnBook(userId, borrowId);
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        BorrowRecordDto borrowRecordDto = borrowService.returnBook(user.getId(), borrowId);
         return ResponseEntity.ok(borrowRecordDto);
     }
 
@@ -56,11 +60,11 @@ public class BorrowController {
             @RequestParam(defaultValue = "borrowDate") String sortBy,
             @RequestParam(defaultValue = "desc") String direction) {
 
-        Long userId = Long.parseLong(userDetails.getUsername());
+        User user = userRepository.findByEmail(userDetails.getUsername());
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<BorrowRecordDto> history = borrowService.getUserBorrowHistory(userId, pageable);
+        Page<BorrowRecordDto> history = borrowService.getUserBorrowHistory(user.getId(), pageable);
         return ResponseEntity.ok(history);
     }
 
@@ -69,8 +73,8 @@ public class BorrowController {
     public ResponseEntity<BorrowRecordDto> getBorrowDetails(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long borrowId) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        BorrowRecordDto borrowRecord = borrowService.getBorrowRecordById(userId, borrowId);
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        BorrowRecordDto borrowRecord = borrowService.getBorrowRecordById(user.getId(), borrowId);
         return ResponseEntity.ok(borrowRecord);
     }
 

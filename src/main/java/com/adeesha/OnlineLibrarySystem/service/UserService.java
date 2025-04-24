@@ -7,4 +7,5 @@ public interface UserService {
     UserDto registerUser(UserRegistrationDto registrationDto);
     UserDto getUserById(Long userId);
     String getUsernameById(Long userId);
+
 }

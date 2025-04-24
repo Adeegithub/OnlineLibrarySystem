@@ -51,8 +51,10 @@ public class UserServiceImpl implements UserService {
     public String getUsernameById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        return user.getName();
+        System.out.println("Auth Check: with user email = " + user.getEmail());
+        return user.getEmail();
     }
+
 
     private UserDto convertToDto(User user) {
         UserDto dto = new UserDto();
@@ -62,4 +64,5 @@ public class UserServiceImpl implements UserService {
         dto.setCreatedAt(user.getCreatedAt());
         return dto;
     }
+
 }
