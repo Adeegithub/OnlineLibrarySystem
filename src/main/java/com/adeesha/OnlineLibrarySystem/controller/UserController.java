@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @PreAuthorize("authentication.name == @userService.getUsernameById(#userId)")
-    public ResponseEntity<UserDto> getUserProfile(@PathVariable Long userId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserDto> getUserProfile(@PathVariable Long userId) {
         UserDto userDto = userService.getUserById(userId);
         return ResponseEntity.ok(userDto);
     }

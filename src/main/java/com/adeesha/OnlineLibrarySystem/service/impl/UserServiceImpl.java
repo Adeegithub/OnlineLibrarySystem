@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
     public String getUsernameById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        System.out.println("Auth Check: with user email = " + user.getEmail());
         return user.getEmail();
     }
 
