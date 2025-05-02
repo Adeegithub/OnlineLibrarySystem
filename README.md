@@ -13,15 +13,17 @@ Entities: <br>
 Implementation: <br>
 Implement REST APIs that allow users to interact with this system. You need to implement
 the following basic functionalities: <br>
-●A user should be able to create their profile by providing basic information.
-●Once registered, users should be able to explore and view the collection of books
+
+● A user should be able to create their profile by providing basic information. <br>
+
+● Once registered, users should be able to explore and view the collection of books
 and see which books have copies available to be borrowed. <br>
 
-●The system should provide users with the ability to search for books based on
+● The system should provide users with the ability to search for books based on
 specific criteria. For example, users should be able to view the list of available
 books by author and published year. <br>
 
-●The user API should be secure against unauthorized access but any user will be
+● The user API should be secure against unauthorized access but any user will be
 able to browse the available book collection in the library. <br>
 
 Ensure that there is optimal performance and fast response times in the system as the
